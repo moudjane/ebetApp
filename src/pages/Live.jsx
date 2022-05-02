@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, SafeAreaView, Button, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, SafeAreaView, Button, TouchableOpacity, View, ScrollView } from 'react-native';
 
 export function LiveScreen() {
 
@@ -8,6 +8,19 @@ export function LiveScreen() {
     const [info, setInfo] = useState([]);
     const [startTime, setStartTime] = useState([]);
     const [PlayersList, setPlayersList] = useState([]);
+    const emoji = {
+        'tennis': '🎾',
+        'baseball': '⚾',
+        'table-tennis': '🏓',
+        'counter-strike': '🔫',
+        'rugby': '🏉',
+        "soccer": "⚽",
+        "dota-2": "⌨️",
+        'handball': '🤾',
+        'squash': '🎾',
+        'electronic-leagues': '🎮',
+        'fifa': '⚽🎮'
+    }
 
     function gameList(ActiveGamemode) {
         fetch(`http://109.205.56.69:4000/live/:${ActiveGamemode}/:10/:10`)
@@ -30,39 +43,73 @@ export function LiveScreen() {
     }
 
     return (
-        <View style={styles.container} >
-            <SafeAreaView style={styles.container}>
+        <View style={styles.containerLive} >
+            <SafeAreaView>
                 <View style={styles.containerLive}>
-                    {data.map(element => <TouchableOpacity key={element} onPress={() => gameList(element)} style={styles.buttonLive}>
-                        <Text key={element} style={styles[element]}>{element}</Text>
-                    </TouchableOpacity>
-                    )}
-                    {/* {info.map(element =>
+                    <ScrollView horizontal={true} persistentScrollbar={false}>
+                        {data.map(element => <TouchableOpacity key={element} onPress={() => gameList(element)} style={styles.square}>
+                            <Text key={element + 1}>{emoji[element]}</Text>
+                            {console.log(element)}
+                            <Text key={element} style={styles[element]}>{element}</Text>
+                        </TouchableOpacity>
+                        )}
+                    </ScrollView>
+                    <View style={styles.matchLive}>
+                    </View>
+                    {info.map(element =>
                         <Text key={element.name}>{element.name}{"\n"}{startTime}{"\n"}{PlayersList}</Text>
-                    )} */}
+                    )}
                 </View>
-                {/* {<View><Text>{info}</Text></View>} */}
-                <StatusBar style="auto" />
+                {/* <StatusBar style="auto" /> */}
             </SafeAreaView>
         </View >
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
+    containerLive: {
+        backgroundColor: "#7CA1B4",
         flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "row",
+        flexWrap: "wrap",
+    },
+    square: {
+        backgroundColor: "#7cb48f",
+        width: 150,
+        height: 50,
+        margin: 8,
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    matchLive: {
+        flex: 1,
+        alignItems: "center",
+    },
+    startTime: {
+        color: '#FF0000'
+    },
+
+});
+/*
+const styles = StyleSheet.create({
+    container: {
+        backgroundColor: "#7CA1B4",
+        flex: 1,
+        flexDirection: 'row',
+        flexWrap: "wrap",
         alignItems: 'center',
         justifyContent: 'center',
-        display: 'flex'
     },
-    buttonLive: {
-        display: 'flex'
+    square: {
+        backgroundColor: "#7cb48f",
+        width: 100,
+        height: 100,
+        margin: 4,
     },
-    basketball: {
-    },
-    containerLive: {
-        display: 'flex'
-    }
+
 });
+*/
 
 export default LiveScreen;
