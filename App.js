@@ -19,7 +19,7 @@ export default function App() {
             if (route.name == 'Live') {
               iconName = 'pulse-outline'
             } else if (route.name == 'Parametres') {
-              iconName = 'hammer-outline'
+              iconName = 'settings-outline'
             } else if (route.name == 'Upcomming') {
               iconName = 'time-outline'
             }

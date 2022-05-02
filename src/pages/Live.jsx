@@ -37,9 +37,9 @@ export function LiveScreen() {
                         <Text key={element} style={styles[element]}>{element}</Text>
                     </TouchableOpacity>
                     )}
-                    {info.map(element =>
+                    {/* {info.map(element =>
                         <Text key={element.name}>{element.name}{"\n"}{startTime}{"\n"}{PlayersList}</Text>
-                    )}
+                    )} */}
                 </View>
                 {/* {<View><Text>{info}</Text></View>} */}
                 <StatusBar style="auto" />
