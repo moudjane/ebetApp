@@ -6,6 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import LiveScreen from './src/pages/Live';
 import SettingsScreen from './src/pages/Settings';
 import UpcommingScreen from './src/pages/Upcomming';
+import { backgroundColor } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes';
 
 const tab = createBottomTabNavigator();
 

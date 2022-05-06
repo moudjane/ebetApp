@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, SafeAreaView, Button, TouchableOpacity, View, ScrollView } from 'react-native';
+import { borderBottomColor } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes';
 
 export function LiveScreen() {
 
     const [data, setData] = useState([]);
     const [info, setInfo] = useState([]);
     const [startTime, setStartTime] = useState([]);
-    const [PlayersList, setPlayersList] = useState([]);
+    const [playersList, setPlayersList] = useState([]);
     const emoji = {
+        'badminton': '🏸',
         'tennis': '🎾',
         'baseball': '⚾',
         'table-tennis': '🏓',
@@ -19,7 +21,10 @@ export function LiveScreen() {
         'handball': '🤾',
         'squash': '🎾',
         'electronic-leagues': '🎮',
-        'fifa': '⚽🎮'
+        'fifa': '⚽🎮',
+        'cricket': '🏏',
+        'league-of-legends': '🤬',
+        'darts': '🎯'
     }
 
     function gameList(ActiveGamemode) {
@@ -39,7 +44,7 @@ export function LiveScreen() {
         gameList('snooker')
     }, []);
     function Players() {
-        info.map(element => element.fixtureList.map(element => setStartTime(element.data.startTime), element.fixtureList.map(element => element.data.competitors.map(element => setPlayersList([...PlayersList, element.name])))))
+        info.map(element => element.fixtureList.map(element => setStartTime(element.data.startTime), element.fixtureList.map(element => element.data.competitors.map(element => setPlayersList([...playersList, element.name])))))
     }
 
     return (
@@ -49,18 +54,24 @@ export function LiveScreen() {
                     <ScrollView horizontal={true} persistentScrollbar={false}>
                         {data.map(element => <TouchableOpacity key={element} onPress={() => gameList(element)} style={styles.square}>
                             <Text key={element + 1}>{emoji[element]}</Text>
-                            {console.log(element)}
                             <Text key={element} style={styles[element]}>{element}</Text>
                         </TouchableOpacity>
                         )}
                     </ScrollView>
-                    <View style={styles.matchLive}>
-                    </View>
-                    {info.map(element =>
-                        <Text key={element.name}>{element.name}{"\n"}{startTime}{"\n"}{PlayersList}</Text>
-                    )}
+                    <ScrollView horizontal={false} persistentScrollbar={false}>
+                        <View style={styles.matchLive}>
+                        </View>
+
+                        {info.map(element =>
+                            <View key={element.name} style={styles.bandeau}><Text key={element.name}>{element.name}{"\n"}{startTime}{"\n"}{playersList}</Text>
+                                <Text>{"\n"}</Text>
+                                {/* {console.log(element.name)} */}
+                            </View>
+
+                        )}
+                    </ScrollView>
                 </View>
-                {/* <StatusBar style="auto" /> */}
+                <StatusBar style="auto" />
             </SafeAreaView>
         </View >
     );
@@ -82,34 +93,16 @@ const styles = StyleSheet.create({
         margin: 8,
         alignItems: "center",
         justifyContent: "center",
+        borderRadius: 10,
     },
-    matchLive: {
-        flex: 1,
-        alignItems: "center",
-    },
-    startTime: {
-        color: '#FF0000'
-    },
-
-});
-/*
-const styles = StyleSheet.create({
-    container: {
-        backgroundColor: "#7CA1B4",
-        flex: 1,
-        flexDirection: 'row',
-        flexWrap: "wrap",
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    square: {
+    bandeau: {
+        backgroundColor: 'white',
+        color: 'white',
+        borderRadius: 10,
+        padding: 10,
+        margin: 20,
         backgroundColor: "#7cb48f",
-        width: 100,
-        height: 100,
-        margin: 4,
     },
-
 });
-*/
 
 export default LiveScreen;
