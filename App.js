@@ -1,18 +1,25 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Appearance } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import LiveScreen from './src/pages/Live';
 import SettingsScreen from './src/pages/Settings';
 import UpcommingScreen from './src/pages/Upcomming';
-import { backgroundColor } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes';
+import { DefaultTheme, DarkTheme } from "@react-navigation/native";
+import { AppearanceProvider, useColorScheme } from "react-native-appearance";
 
 const tab = createBottomTabNavigator();
 
 export default function App() {
+  const scheme = useColorScheme();
+  const MyTheme = {
+    colors: {
+      background: 'red'
+    },
+  };
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={scheme === "dark" ? DarkTheme : DefaultTheme}>
       <tab.Navigator
         initialRouteName="Live"
         screenOptions={({ route }) => ({

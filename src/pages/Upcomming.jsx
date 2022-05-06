@@ -5,7 +5,7 @@ import { StyleSheet, Text, SafeAreaView, Button, View } from 'react-native';
 export function UpcommingScreen() {
     return (
         <View style={styles.container}>
-            <Text>COMMING SOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOON</Text>
+            <Text>çiuerjçrjfe_çrfjeç</Text>
             <StatusBar style="auto" />
         </View>
     );

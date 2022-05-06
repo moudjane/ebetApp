@@ -10,6 +10,7 @@ export function LiveScreen() {
     const [startTime, setStartTime] = useState([]);
     const [playersList, setPlayersList] = useState([]);
     const [outcomes, setOutcomes] = useState([]);
+
     const emoji = {
         'badminton': '🏸',
         'tennis': '🎾',
@@ -48,12 +49,10 @@ export function LiveScreen() {
         gameList('snooker')
     }, []);
     function Players() {
-        // setPlayersList([])
-        // setOutcomes([])
+        setPlayersList([])
+        setOutcomes([])
         info.map(element => element.fixtureList.map(element => setStartTime(element.data.startTime), element.fixtureList.map(element => element.data.competitors.map(element => setPlayersList([...playersList, element.name])))))
         info.map(element => element.fixtureList.map(element => setStartTime(element.data.startTime), element.fixtureList.map(element => element.groups.map(element => element.templates.map(element => element.markets.map(element => element.outcomes.map(element => setOutcomes([...outcomes, element.odds]))))))))
-        // info.map(element => element.fixtureList.map(element => setStartTime(element.data.startTime), element.fixtureList.map(element => element.data.competitors.map(element => setPlayersList([...playersList, element.name])))))
-
     }
 
     return (
@@ -64,18 +63,20 @@ export function LiveScreen() {
                         {data.map(element =>
                             <TouchableOpacity
                                 key={element}
-                                onPress={() => gameList(element)} style={styles.square}>
+                                onPress={() =>
+                                    gameList(element)} style={styles.square}>
                                 <Text key={element + 1}>{emoji[element]}</Text>
-                                <Text key={element} style={styles.teext}>{element}</Text>
+                                <Text key={element} style={styles[element]}>{element}</Text>
                             </TouchableOpacity>
                         )}
                     </ScrollView>
                     <ScrollView horizontal={false} persistentScrollbar={false}>
-                        <View style={styles.matchLive} />
+                        <View style={styles.matchLive}>
+                        </View>
+
                         {info.map(element =>
                             <View key={element.name} style={styles.bandeau}>
-                                <Text key={element.name} style={styles.teext}>{element.name}{"\n"}{startTime}{"\n"}{playersList}{"\n"}{outcomes}</Text>
-                                {/* <Text key={element.name}>{element.name}{"\n"}{startTime}{"\n"}{playersList}{"\n"}{outcomes}</Text> */}
+                                <Text key={element.name}>{element.name}{"\n"}{startTime}{"\n"}{playersList}{"\n"}{outcomes}</Text>
                                 {/* <Text key={element.odds}>{element.odds}{"\n"}{outcomes[0]}{"\n"}{outcomes[1]}</Text> */}
                                 {/* {console.log(element.odds)} */}
                             </View>
@@ -96,7 +97,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         flexDirection: "row",
         flexWrap: "wrap",
-        color: '#FFFFFF'
     },
     square: {
         backgroundColor: "#7cb48f",
@@ -106,19 +106,15 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         borderRadius: 10,
-        color: '#FFFFFF'
     },
     bandeau: {
         backgroundColor: 'white',
-        color: '#FFFFFF',
+        color: 'white',
         borderRadius: 10,
         padding: 10,
         margin: 20,
         backgroundColor: "#7cb48f",
     },
-    teext: {
-        color: '#ffffff'
-    }
 });
 
 export default LiveScreen;
