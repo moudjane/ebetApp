@@ -4,12 +4,8 @@ import { StyleSheet, Text, SafeAreaView, Button, TouchableOpacity, View, ScrollV
 import { borderBottomColor } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes';
 
 export function LiveScreen() {
-
-    const [data, setData] = useState([]);
-    const [info, setInfo] = useState([]);
-    const [startTime, setStartTime] = useState([]);
-    const [playersList, setPlayersList] = useState([]);
-    const [outcomes, setOutcomes] = useState([]);
+    const [matchsData, setMatchsData] = useState({ name: [], players: [] });
+    const [sportsData, setSportsData] = useState([]);
     const emoji = {
         'badminton': '🏸',
         'tennis': '🎾',
@@ -28,40 +24,43 @@ export function LiveScreen() {
         'league-of-legends': '🤬',
         'darts': '🎯',
         'volleyball': '🏐',
-        'ice-hockey': '🏒'
+        'ice-hockey': '🏒',
+        'futsal': '👟'
     }
 
-    function gameList(ActiveGamemode) {
-        fetch(`http://109.205.56.69:4000/live/:${ActiveGamemode}/:10/:10`)
+
+    // Récupère les matchs en direct en fonction du sport séléctionné
+    function gameList(selectedSport) {
+        fetch(`http://109.205.56.69:4000/live/:${selectedSport}/:10/:10`)
             .then((response) => response.json())
             .then((json) => {
-                setInfo(json.slugSport.tournamentList)
-                Players();
-            })
+                let name = [];
+                let players = [];
+                json.slugSport.tournamentList.map((element, index) => {
+                    name.push(element.name);
+                    players.push(element.fixtureList[0].data.competitors);
+                });
+                setMatchsData({ name: name, players: players });
+                console.log("matchsData");
+                console.log(matchsData);
+            });
     }
+
+    // Récupère les sports en direct
     useEffect(() => {
         fetch('http://109.205.56.69:4000/sports')
             .then((response) => response.json())
             .then((json) => {
-                setData(json)
+                setSportsData(json)
             })
-        gameList('snooker')
     }, []);
-    function Players() {
-        // setPlayersList([])
-        // setOutcomes([])
-        info.map(element => element.fixtureList.map(element => setStartTime(element.data.startTime), element.fixtureList.map(element => element.data.competitors.map(element => setPlayersList([...playersList, element.name])))))
-        info.map(element => element.fixtureList.map(element => setStartTime(element.data.startTime), element.fixtureList.map(element => element.groups.map(element => element.templates.map(element => element.markets.map(element => element.outcomes.map(element => setOutcomes([...outcomes, element.odds]))))))))
-        // info.map(element => element.fixtureList.map(element => setStartTime(element.data.startTime), element.fixtureList.map(element => element.data.competitors.map(element => setPlayersList([...playersList, element.name])))))
-
-    }
 
     return (
         <View style={styles.containerLive} >
             <SafeAreaView>
                 <View style={styles.containerLive}>
                     <ScrollView horizontal={true} persistentScrollbar={false}>
-                        {data.map(element =>
+                        {sportsData.map(element =>
                             <TouchableOpacity
                                 key={element}
                                 onPress={() => gameList(element)} style={styles.square}>
@@ -71,26 +70,40 @@ export function LiveScreen() {
                         )}
                     </ScrollView>
                     <ScrollView horizontal={false} persistentScrollbar={false}>
-                        <View style={styles.matchLive} />
-                        {info.map(element =>
-                            <View key={element.name} style={styles.bandeau}>
-                                <Text key={element.name} style={styles.teext}>{element.name}{"\n"}{startTime}{"\n"}{playersList}{"\n"}{outcomes}</Text>
-                                {/* <Text key={element.name}>{element.name}{"\n"}{startTime}{"\n"}{playersList}{"\n"}{outcomes}</Text> */}
-                                {/* <Text key={element.odds}>{element.odds}{"\n"}{outcomes[0]}{"\n"}{outcomes[1]}</Text> */}
-                                {/* {console.log(element.odds)} */}
-                            </View>
-                        )}
+                        <View>
+                            {matchsData.name.map((element, index) => {
+                                return (
+                                    <View style={styles.bandeau}>
+                                        <Text style={styles.teext}>
+                                            {element}{'\n'}
+                                        </Text>
+                                        <View style={styles.linePlayers}>
+                                            {matchsData.players[index].map((element, index) => {
+                                                return (
+                                                    <Text key={index + element} style={[styles.player, index ? styles.right : styles.left]}>
+                                                        {element.name}
+                                                    </Text>
+                                                )
+                                            }
+                                            )}
+                                        </View>
+                                    </View>
+                                )
+                            }
+                            )}
+                        </View>
+                        <View style={{ height: 96 }} />
                     </ScrollView>
                 </View>
                 <StatusBar style="auto" />
-            </SafeAreaView>
+            </SafeAreaView >
         </View >
     );
-};
+}
 
 const styles = StyleSheet.create({
     containerLive: {
-        backgroundColor: "#7CA1B4",
+        backgroundColor: "#519aec",
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
@@ -99,7 +112,7 @@ const styles = StyleSheet.create({
         color: '#FFFFFF'
     },
     square: {
-        backgroundColor: "#7cb48f",
+        backgroundColor: "#eca351",
         width: 150,
         height: 50,
         margin: 8,
@@ -109,15 +122,33 @@ const styles = StyleSheet.create({
         color: '#FFFFFF'
     },
     bandeau: {
-        backgroundColor: 'white',
+        backgroundColor: "#eca351",
         color: '#FFFFFF',
         borderRadius: 10,
         padding: 10,
         margin: 20,
-        backgroundColor: "#7cb48f",
+        height: 120,
+        textAlign: 'center'
     },
     teext: {
-        color: '#ffffff'
+        color: '#ffffff',
+        fontSize: 15,
+        textAlign: 'center'
+    },
+    left: {
+        color: '#FF0000',
+    },
+    right: {
+        color: '#0000FF',
+    },
+    player: {
+        fontSize: 13.5,
+    },
+    linePlayers: {
+        flex: 1,
+        flexDirection: "row",
+        flexWrap: "wrap",
+        justifyContent: 'space-between',
     }
 });
 
