@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
         color: '#FFFFFF'
     },
     bandeau: {
-        backgroundColor: "#eca351",
+        backgroundColor: "#5AB078",
         color: '#FFFFFF',
         borderRadius: 10,
         padding: 10,
@@ -149,6 +149,22 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         flexWrap: "wrap",
         justifyContent: 'space-between',
+    },
+    bandeau2: {
+        backgroundColor: "#5AB078",
+        color: '#FFFFFF',
+        borderRadius: 10,
+        padding: 10,
+        margin: 20,
+        height: 120,
+        width: 360,
+        textAlign: 'center'
+    },
+    container: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "#519aec",
     }
 });
 
